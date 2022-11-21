@@ -2,6 +2,7 @@
 
 void AdresatMenedzer::dodajAdresata()
 {
+    cout << ID_ZALOGOWANEGO_UZYTKOWNIKA << endl;
     Adresat adresat = podajDaneNowegoAdresata();
     adresaci.push_back(adresat);
 
@@ -23,24 +24,24 @@ Adresat AdresatMenedzer::podajDaneNowegoAdresata()
         cout << "------------------------------" << endl;
         cin.sync();
         cout << "Podaj imie: ";
-        getline(cin, imie);
+        imie = MetodyPomocnicze::wczytajLinie();
         adresat.ustawImie(imie);
         cout << "Podaj nazwisko: ";
-        getline(cin, nazwisko);
+        nazwisko = MetodyPomocnicze::wczytajLinie();
         adresat.ustawNazwisko(nazwisko);
         cout << "Podaj numer telefonu: ";
-        getline(cin, numerTelefonu);
+        numerTelefonu = MetodyPomocnicze::wczytajLinie();
         adresat.ustawNumerTelefonu(numerTelefonu);
         cout << "Podaj email: ";
-        getline(cin, email);
+        email = MetodyPomocnicze::wczytajLinie();
         adresat.ustawEmail(email);
         cout << "Podaj adres: ";
-        getline(cin, adres);
+        adres = MetodyPomocnicze::wczytajLinie();
         adresat.ustawAdres(adres);
         cout << endl << endl;
 
         adresat.ustawIdAdresata(pobierzIdNowegoAdresata());
-        adresat.ustawIdUzytkownika(idZalogowanegoUzytkownika);
+        adresat.ustawIdUzytkownika(ID_ZALOGOWANEGO_UZYTKOWNIKA);
         adresat.ustawImie(imie);
         adresat.ustawNazwisko(nazwisko);
         adresat.ustawNumerTelefonu(numerTelefonu);
@@ -53,7 +54,6 @@ Adresat AdresatMenedzer::podajDaneNowegoAdresata()
 
 int AdresatMenedzer::pobierzIdNowegoAdresata()
 {
-    vector <Adresat> adresaci = plikiZAdresatami.wczytajAdresatowZPliku();
     if (adresaci.empty() == true)
         return 1;
     else
@@ -62,8 +62,6 @@ int AdresatMenedzer::pobierzIdNowegoAdresata()
 
 void AdresatMenedzer::wyswietlWszystkichAdresatow()
 {
-    vector <Adresat> adresaci = plikiZAdresatami.wczytajAdresatowZPliku();
-
     if (adresaci.empty() == true)
     {
         system("cls");
@@ -80,7 +78,7 @@ void AdresatMenedzer::wyswietlWszystkichAdresatow()
 
         for (unsigned int i = 0; i < adresaci.size(); i++)
         {
-            if (adresaci[i].pobierzIdUzytkownika() == idZalogowanegoUzytkownika)
+            if (adresaci[i].pobierzIdUzytkownika() == ID_ZALOGOWANEGO_UZYTKOWNIKA)
             {
                 cout << "ID adresata:        " << adresaci[i].pobierzIdAdresata() << endl;
                 cout << "Imie:               " << adresaci[i].pobierzImie() << endl;
@@ -90,7 +88,7 @@ void AdresatMenedzer::wyswietlWszystkichAdresatow()
                 cout << "Adres:              " << adresaci[i].pobierzAdres() << endl;
                 cout << "--------------------" << endl;
             }
-            else if (adresaci[i].pobierzIdUzytkownika() != idZalogowanegoUzytkownika && adresaci[i].pobierzIdUzytkownika() == adresaci.back().pobierzIdUzytkownika())
+            else if (adresaci[i].pobierzIdUzytkownika() != ID_ZALOGOWANEGO_UZYTKOWNIKA && adresaci[i].pobierzIdUzytkownika() == adresaci.back().pobierzIdUzytkownika())
                 {
                 system("cls");
                 cout << ">>>>> MENU UZYTKOWNIKA <<<<<" << endl;
@@ -103,9 +101,10 @@ void AdresatMenedzer::wyswietlWszystkichAdresatow()
 }
 
 void AdresatMenedzer::ustawIdZalogowanegoUzytkownika(int noweIdZalogowanegoUzytkownika) {
-    idZalogowanegoUzytkownika = noweIdZalogowanegoUzytkownika;
+    noweIdZalogowanegoUzytkownika = pobierzIdZalogowanegoUzytkownika();
+    adresaci = plikiZAdresatami.wczytajAdresatowZPliku();
 }
 
 int AdresatMenedzer::pobierzIdZalogowanegoUzytkownika() {
-    return idZalogowanegoUzytkownika;
+    return ID_ZALOGOWANEGO_UZYTKOWNIKA;
 }

@@ -53,7 +53,8 @@ bool UzytkownikMenedzer::czyIstniejeLogin(string login)
             system ("cls");
             cout << ">>>>> REJESTRACJA UZYTKOWNIKA <<<<<" << endl;
             cout << "-----------------------------------" << endl;
-            cout << endl << "Istnieje uzytkownik o takim loginie." << endl;
+            cout << "Istnieje uzytkownik o takim loginie. Sprobuj wybrac inny login." << endl;
+            Sleep(2500);
             return true;
         }
     }
@@ -71,7 +72,7 @@ void UzytkownikMenedzer::wypiszWszystkichUzytkownikow()
 
 }
 
-void UzytkownikMenedzer::logowanieUzytkownika()
+int UzytkownikMenedzer::logowanieUzytkownika()
 {
     string login, haslo;
 
@@ -79,13 +80,15 @@ void UzytkownikMenedzer::logowanieUzytkownika()
     cout << ">>>>> LOGOWANIE UZYTKOWNIKA <<<<<" << endl;
     cout << "---------------------------------" << endl;
     cout << "Podaj login: ";
-    login = plikiZUzytkownikami.wczytajLinie();
+    login = MetodyPomocnicze::wczytajLinie();
 
     for (unsigned int i = 0; i < uzytkownicy.size(); i++)
     {
         if (uzytkownicy[i].pobierzLogin() == login)
         {
             idZalogowanegoUzytkownika = uzytkownicy[i].pobierzId();
+
+            cout << idZalogowanegoUzytkownika << endl;
             for (int iloscProb = 3; iloscProb > 0; iloscProb--)
             {
                 system("cls");
@@ -93,14 +96,14 @@ void UzytkownikMenedzer::logowanieUzytkownika()
                 cout << "---------------------------------" << endl;
                 cout << "Ilosc pozostalych prob: " << iloscProb <<endl << endl;
                 cout << "Podaj swoje haslo: ";
-                haslo = plikiZUzytkownikami.wczytajLinie();
+                haslo = MetodyPomocnicze::wczytajLinie();
                 cout << endl << endl;
 
                 if (uzytkownicy[i].pobierzHaslo() == haslo)
                 {
                     cout << "Zalogowales sie poprawnie" << endl << endl;
                     system("pause");
-                    return;
+                    return idZalogowanegoUzytkownika;
                 }
             }
             cout << "Wprowadzono 3 razy bledne haslo! Program konczy swoje dzialanie, sprobuj ponownie." << endl;
@@ -113,6 +116,14 @@ void UzytkownikMenedzer::logowanieUzytkownika()
     exit(0);
 }
 
+bool UzytkownikMenedzer::czyUzytkownikJestZalogowany()
+{
+    if (idZalogowanegoUzytkownika > 0)
+        return true;
+    else
+        return false;
+}
+
 void UzytkownikMenedzer::zmianaHaslaZalogowanegoUzytkownika()
 {
     Uzytkownik uzytkownik;
@@ -122,11 +133,11 @@ void UzytkownikMenedzer::zmianaHaslaZalogowanegoUzytkownika()
     cout << ">>>>> ZMIANA HASLA <<<<<" << endl;
     cout << "------------------------" << endl;
     cout << "Podaj nowe haslo: ";
-    noweHaslo = plikiZUzytkownikami.wczytajLinie();
+    noweHaslo = MetodyPomocnicze::wczytajLinie();
 
     for (unsigned int i = 0; i < uzytkownicy.size(); i++)
     {
-        if (uzytkownicy[i].pobierzId() == idZalogowanegoUzytkownika)
+        if (idZalogowanegoUzytkownika == uzytkownicy[i].pobierzId())
         {
             uzytkownik.ustawHaslo(noweHaslo);
             uzytkownicy[i].ustawHaslo(noweHaslo);
@@ -148,5 +159,9 @@ void UzytkownikMenedzer::zmianaHaslaZalogowanegoUzytkownika()
 
 int UzytkownikMenedzer::pobierzIdZalogowanegoUzytkownika() {
     return idZalogowanegoUzytkownika;
+}
+
+void UzytkownikMenedzer::wylogowanieUzytkownika() {
+    idZalogowanegoUzytkownika = 0;
 }
 

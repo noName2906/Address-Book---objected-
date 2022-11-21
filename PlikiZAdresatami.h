@@ -27,7 +27,6 @@ public:
     void dopiszAdresataDoPliku(Adresat adresat);
     vector <Adresat> wczytajAdresatowZPliku();
     void zapiszWszystkichAdresatowDoPliku(vector <Adresat> adresaci);
-    string wczytajLinie();
 };
 
 #endif

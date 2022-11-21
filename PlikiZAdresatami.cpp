@@ -143,14 +143,6 @@ vector <Adresat> PlikiZAdresatami::wczytajAdresatowZPliku()
     return adresaci;
 }
 
-string PlikiZAdresatami::wczytajLinie()
-{
-    string wejscie = "";
-    cin.sync();
-    getline(cin, wejscie);
-    return wejscie;
-}
-
 void PlikiZAdresatami::zapiszWszystkichAdresatowDoPliku(vector <Adresat> adresaci)
 {
     Uzytkownik uzytkownik;
