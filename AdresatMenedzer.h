@@ -19,7 +19,7 @@ using namespace std;
 class AdresatMenedzer
 {
     int idAdresata;
-    const int ID_ZALOGOWANEGO_UZYTKOWNIKA;
+    const int ID_ZALOGOWANEGO_UZYTKOWNIKA ;
     vector <Adresat> adresaci;
 
     Adresat podajDaneNowegoAdresata();

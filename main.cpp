@@ -56,7 +56,7 @@ int main()
                         break;
                     case 8:
                         ksiazkaAdresowa.wylogowanieUzytkownika();
-                        exit(0);
+                        return main();
                         break;
                     default:
                         cout << endl;
