@@ -10,7 +10,7 @@ void PlikiZAdresatami::dopiszAdresataDoPliku(Adresat adresat)
     {
         liniaZDanymiAdresata = zamienDaneAdresataNaLinieZDanymiOddzielonaPionowymiKreskami(adresat);
 
-        if (czyPlikJestPusty() == true)
+        if (PlikTekstowy::czyPlikJestPusty() == true)
         {
             plik << liniaZDanymiAdresata;
         }
@@ -22,16 +22,6 @@ void PlikiZAdresatami::dopiszAdresataDoPliku(Adresat adresat)
     else
         cout << "Nie udalo sie otworzyc pliku " << nazwaPlikuZAdresatami << " i zapisac w nim danych." << endl;
     plik.close();
-}
-
-bool PlikiZAdresatami::czyPlikJestPusty()
-{
-    fstream plik;
-    plik.seekg(0, ios::end);
-    if (plik.tellg() == 0)
-        return true;
-    else
-        return false;
 }
 
 string PlikiZAdresatami::zamienDaneAdresataNaLinieZDanymiOddzielonaPionowymiKreskami(Adresat adresat)
@@ -94,7 +84,7 @@ Adresat PlikiZAdresatami::pobierzDaneAdresata(string daneJednegoAdresataOddzielo
     return adresat;
 }
 
-vector <Adresat> PlikiZAdresatami::wczytajAdresatowZPliku()
+vector <Adresat> PlikiZAdresatami::wczytajWszystkichAdresatowZPliku()
 {
     Adresat adresat;
     string linia = "";
@@ -102,6 +92,7 @@ vector <Adresat> PlikiZAdresatami::wczytajAdresatowZPliku()
     int nr_linii = 1;
     fstream plik;
 
+    adresaci.clear();
     plik.open(nazwaPlikuZAdresatami.c_str(), ios::in);
 
     if (plik.good() == true)
@@ -143,6 +134,109 @@ vector <Adresat> PlikiZAdresatami::wczytajAdresatowZPliku()
     return adresaci;
 }
 
+vector <Adresat> PlikiZAdresatami::wczytajAdresatowZPliku(int idZalogowanegoUzytkownika)
+{
+    Adresat adresat;
+    string linia = "";
+    int i = 0;
+    int nr_linii = 1;
+    fstream plik;
+
+    plik.open(nazwaPlikuZAdresatami.c_str(), ios::in);
+
+    if (plik.good() == true)
+    {
+        while (getline(plik, linia, '|'))
+        {
+            switch(nr_linii)
+            {
+            case 1:
+                adresat.ustawIdAdresata(atoi(linia.c_str()));
+                break;
+            case 2:
+                adresat.ustawIdUzytkownika(atoi(linia.c_str()));
+                break;
+            case 3:
+                adresat.ustawImie(linia);
+                break;
+            case 4:
+                adresat.ustawNazwisko(linia);
+                break;
+            case 5:
+                adresat.ustawNumerTelefonu(linia);
+                break;
+            case 6:
+                adresat.ustawEmail(linia);
+                break;
+            case 7:
+                adresat.ustawAdres(linia);
+                if (adresat.pobierzIdUzytkownika() == idZalogowanegoUzytkownika) {
+                    adresaci.push_back(adresat);}
+                nr_linii = 0;
+                getline(plik, linia);
+                i++;
+                break;
+            }
+            nr_linii++;
+        }
+        plik.close();
+    }
+    return adresaci;
+}
+
+int PlikiZAdresatami::podajIdOstatniegoAdresata()
+{
+    Adresat adresat;
+    string linia = "";
+    int i = 0;
+    int nr_linii = 1;
+    fstream plik;
+
+    plik.open(nazwaPlikuZAdresatami.c_str(), ios::in);
+
+    if (plik.good() == true)
+    {
+        while (getline(plik, linia, '|'))
+        {
+            switch(nr_linii)
+            {
+            case 1:
+                adresat.ustawIdAdresata(atoi(linia.c_str()));
+                break;
+            case 2:
+                adresat.ustawIdUzytkownika(atoi(linia.c_str()));
+                break;
+            case 3:
+                adresat.ustawImie(linia);
+                break;
+            case 4:
+                adresat.ustawNazwisko(linia);
+                break;
+            case 5:
+                adresat.ustawNumerTelefonu(linia);
+                break;
+            case 6:
+                adresat.ustawEmail(linia);
+                break;
+            case 7:
+                adresat.ustawAdres(linia);
+                nr_linii = 0;
+                getline(plik, linia);
+                i++;
+                break;
+            }
+            nr_linii++;
+        }
+        plik.close();
+        idOstatniegoAdresata = adresat.pobierzIdAdresata();
+    }
+    else
+    {
+        idOstatniegoAdresata = 0;
+    }
+    return idOstatniegoAdresata;
+}
+
 void PlikiZAdresatami::zapiszWszystkichAdresatowDoPliku(vector <Adresat> adresaci)
 {
     Uzytkownik uzytkownik;
@@ -154,11 +248,9 @@ void PlikiZAdresatami::zapiszWszystkichAdresatowDoPliku(vector <Adresat> adresac
     if (plik.good() == true)
     {
 
-        cout << adresaci.size() << endl;
-
         for (unsigned int i = 0; i < adresaci.size(); i++)
         {
-            plik << adresaci[i].pobierzIdAdresata() << "|" << uzytkownicy[i].pobierzId() << "|" << adresaci[i].pobierzImie() << "|" << adresaci[i].pobierzNazwisko() << adresaci[i].pobierzNumerTelefonu() << adresaci[i].pobierzEmail() << adresaci[i].pobierzAdres() << endl;
+            plik << adresaci[i].pobierzIdAdresata() << "|" << adresaci[i].pobierzIdUzytkownika() << "|" << adresaci[i].pobierzImie() << "|" << adresaci[i].pobierzNazwisko() << "|" << adresaci[i].pobierzNumerTelefonu() << "|" << adresaci[i].pobierzEmail() << "|" <<  adresaci[i].pobierzAdres() << "|" << endl;
         }
     }
     else

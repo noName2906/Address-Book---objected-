@@ -10,12 +10,14 @@
 #include "Uzytkownik.h"
 #include "PlikiZUzytkownikami.h"
 #include "MetodyPomocnicze.h"
+#include "PlikTekstowy.h"
 
 using namespace std;
 
-class PlikiZAdresatami
+class PlikiZAdresatami :public PlikTekstowy
 {
     const string nazwaPlikuZAdresatami;
+   int idOstatniegoAdresata;
 
     vector <Adresat> adresaci;
     bool czyPlikJestPusty();
@@ -23,9 +25,12 @@ class PlikiZAdresatami
     Adresat pobierzDaneAdresata(string daneAdresataOddzielonePionowymiKreskami);
 
 public:
-    PlikiZAdresatami(string  NAZWAPLIKUZADRESATAMI) : nazwaPlikuZAdresatami(NAZWAPLIKUZADRESATAMI) {};
+    PlikiZAdresatami(string  NAZWAPLIKUZADRESATAMI)
+    : nazwaPlikuZAdresatami(NAZWAPLIKUZADRESATAMI) {};
     void dopiszAdresataDoPliku(Adresat adresat);
-    vector <Adresat> wczytajAdresatowZPliku();
+    vector <Adresat> wczytajAdresatowZPliku(int idZalogowanegoUzytkownika);
+    vector <Adresat> wczytajWszystkichAdresatowZPliku();
+    int podajIdOstatniegoAdresata();
     void zapiszWszystkichAdresatowDoPliku(vector <Adresat> adresaci);
 };
 

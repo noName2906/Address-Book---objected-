@@ -8,10 +8,11 @@
 
 #include "Uzytkownik.h"
 #include "MetodyPomocnicze.h"
+#include "PlikTekstowy.h"
 
 using namespace std;
 
-class PlikiZUzytkownikami
+class PlikiZUzytkownikami :public PlikTekstowy
 {
     const string nazwaPlikuZUzytkownikami;
 

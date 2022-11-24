@@ -34,6 +34,26 @@ void KsiazkaAdresowa::wyswietlWszystkichAdresatow()
     adresatMenedzer -> wyswietlWszystkichAdresatow();
 }
 
+void KsiazkaAdresowa::wyszukajPoImieniu()
+{
+    adresatMenedzer -> wyszukajPoImieniu();
+}
+
+void KsiazkaAdresowa::wyszukajPoNazwisku()
+{
+    adresatMenedzer -> wyszukajPoNazwisku();
+}
+
+void KsiazkaAdresowa::usunAdresata()
+{
+    adresatMenedzer -> usunAdresata();
+}
+
+void KsiazkaAdresowa::edytujAdresata()
+{
+    adresatMenedzer -> edytujAdresata();
+}
+
 void KsiazkaAdresowa::wylogowanieUzytkownika()
 {
     uzytkownikMenedzer.wylogowanieUzytkownika();

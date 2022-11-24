@@ -36,6 +36,10 @@ int main()
                     cout << "----------------------------" << endl;
                     cout << "1. Dodaj adresata" << endl;
                     cout << "2. Wyswietl wszystkich adresatow" << endl;
+                    cout << "3. Wyszukaj po imieniu" << endl;
+                    cout << "4. Wyszukaj po nazwisku" << endl;
+                    cout << "5. Usun adresata" << endl;
+                    cout << "6. Edytuj adresata" << endl;
                     cout << "----------------------------" << endl;
                     cout << "7. Zmien haslo" << endl;
                     cout << "8. Wyloguj sie" << endl;
@@ -51,13 +55,24 @@ int main()
                     case 2:
                         ksiazkaAdresowa.wyswietlWszystkichAdresatow();
                         break;
+                    case 3:
+                        ksiazkaAdresowa.wyszukajPoImieniu();
+                        break;
+                    case 4:
+                        ksiazkaAdresowa.wyszukajPoNazwisku();
+                        break;
+                    case 5:
+                        ksiazkaAdresowa.usunAdresata();
+                        break;
+                    case 6:
+                        ksiazkaAdresowa.edytujAdresata();
+                        break;
                     case 7:
                         ksiazkaAdresowa.zmianaHaslaZalogowanegoUzytkownika();
                         break;
                     case 8:
                         ksiazkaAdresowa.wylogowanieUzytkownika();
                         return main();
-                        break;
                     default:
                         cout << endl;
                         cout << "Niepoprawny wybor. Sprobuj jeszcze raz" << endl;

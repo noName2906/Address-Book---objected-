@@ -18,18 +18,19 @@ using namespace std;
 
 class AdresatMenedzer
 {
-    int idAdresata;
+    int idAdresata, iloscSzukanychAdresatow, szukaneId, liniaDoUsuniecia;
     const int ID_ZALOGOWANEGO_UZYTKOWNIKA ;
+    string noweImie, noweNazwisko, nowyNumerTelefonu, nowyEmail, nowyAdres;
     vector <Adresat> adresaci;
 
     Adresat podajDaneNowegoAdresata();
-    int pobierzIdNowegoAdresata();
     PlikiZAdresatami plikiZAdresatami;
 
 public:
     AdresatMenedzer(string nazwaPlikuZAdresatami, int idZalogowanegoUzytkownika)
-    : plikiZAdresatami(nazwaPlikuZAdresatami), ID_ZALOGOWANEGO_UZYTKOWNIKA(idZalogowanegoUzytkownika) {
-        adresaci = plikiZAdresatami.wczytajAdresatowZPliku();
+    : ID_ZALOGOWANEGO_UZYTKOWNIKA(idZalogowanegoUzytkownika), plikiZAdresatami(nazwaPlikuZAdresatami) {
+        adresaci = plikiZAdresatami.wczytajAdresatowZPliku(idZalogowanegoUzytkownika);
+        iloscSzukanychAdresatow = 0, szukaneId = 0, liniaDoUsuniecia = 0;
     };
     void dodajAdresata();
     void wypiszWszystkichAdresatow();
@@ -37,7 +38,12 @@ public:
 
     void ustawIdZalogowanegoUzytkownika (int noweIdZalogowanegoUzytkownika);
     int pobierzIdZalogowanegoUzytkownika();
+    int pobierzIdNowegoAdresata();
     void wyswietlWszystkichAdresatow();
+    void wyszukajPoImieniu();
+    void wyszukajPoNazwisku();
+    void usunAdresata();
+    void edytujAdresata();
 
 };
 

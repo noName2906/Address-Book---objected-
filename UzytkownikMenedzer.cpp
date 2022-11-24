@@ -101,6 +101,9 @@ int UzytkownikMenedzer::logowanieUzytkownika()
 
                 if (uzytkownicy[i].pobierzHaslo() == haslo)
                 {
+                    system ("cls");
+                    cout << ">>>>> LOGOWANIE UZYTKOWNIKA <<<<<" << endl;
+                    cout << "---------------------------------" << endl;
                     cout << "Zalogowales sie poprawnie" << endl << endl;
                     system("pause");
                     return idZalogowanegoUzytkownika;
