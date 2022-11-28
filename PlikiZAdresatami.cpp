@@ -4,7 +4,7 @@ void PlikiZAdresatami::dopiszAdresataDoPliku(Adresat adresat)
 {
     string liniaZDanymiAdresata = "";
     fstream plik;
-    plik.open(nazwaPlikuZAdresatami.c_str(), ios::app);
+    plik.open(nazwaPliku.c_str(), ios::app);
 
     if (plik.good() == true)
     {
@@ -20,7 +20,7 @@ void PlikiZAdresatami::dopiszAdresataDoPliku(Adresat adresat)
         }
     }
     else
-        cout << "Nie udalo sie otworzyc pliku " << nazwaPlikuZAdresatami << " i zapisac w nim danych." << endl;
+        cout << "Nie udalo sie otworzyc pliku " << nazwaPliku << " i zapisac w nim danych." << endl;
     plik.close();
 }
 
@@ -93,7 +93,7 @@ vector <Adresat> PlikiZAdresatami::wczytajWszystkichAdresatowZPliku()
     fstream plik;
 
     adresaci.clear();
-    plik.open(nazwaPlikuZAdresatami.c_str(), ios::in);
+    plik.open(nazwaPliku.c_str(), ios::in);
 
     if (plik.good() == true)
     {
@@ -142,10 +142,11 @@ vector <Adresat> PlikiZAdresatami::wczytajAdresatowZPliku(int idZalogowanegoUzyt
     int nr_linii = 1;
     fstream plik;
 
-    plik.open(nazwaPlikuZAdresatami.c_str(), ios::in);
+    plik.open(nazwaPliku.c_str(), ios::in);
 
     if (plik.good() == true)
     {
+        adresaci.clear();
         while (getline(plik, linia, '|'))
         {
             switch(nr_linii)
@@ -192,7 +193,7 @@ int PlikiZAdresatami::podajIdOstatniegoAdresata()
     int nr_linii = 1;
     fstream plik;
 
-    plik.open(nazwaPlikuZAdresatami.c_str(), ios::in);
+    plik.open(nazwaPliku.c_str(), ios::in);
 
     if (plik.good() == true)
     {
@@ -237,25 +238,71 @@ int PlikiZAdresatami::podajIdOstatniegoAdresata()
     return idOstatniegoAdresata;
 }
 
-void PlikiZAdresatami::zapiszWszystkichAdresatowDoPliku(vector <Adresat> adresaci)
+void PlikiZAdresatami::usunAdresataZPliku(int idUsuwanegoAdresata)
 {
-    Uzytkownik uzytkownik;
-    Adresat adresat;
-    vector <Uzytkownik> uzytkownicy;
-    fstream plik;
-    plik.open(nazwaPlikuZAdresatami.c_str(), ios::out);
+    fstream odczytywanyPlikTekstowy, tymczasowyPlikTekstowy;
+    string wczytanaLinia = "";
+    int numerWczytanejLinii = 1;
 
-    if (plik.good() == true)
+    odczytywanyPlikTekstowy.open("listaAdresatow.txt", ios::in);
+    tymczasowyPlikTekstowy.open ("Adresaci_tymczasowo.txt", ios::out | ios::app);
+
+    if (odczytywanyPlikTekstowy.good())
     {
-
-        for (unsigned int i = 0; i < adresaci.size(); i++)
+        while (getline(odczytywanyPlikTekstowy, wczytanaLinia))
         {
-            plik << adresaci[i].pobierzIdAdresata() << "|" << adresaci[i].pobierzIdUzytkownika() << "|" << adresaci[i].pobierzImie() << "|" << adresaci[i].pobierzNazwisko() << "|" << adresaci[i].pobierzNumerTelefonu() << "|" << adresaci[i].pobierzEmail() << "|" <<  adresaci[i].pobierzAdres() << "|" << endl;
+            if (MetodyPomocnicze::konwersjaStringNaInt(wczytanaLinia.substr(0,'|')) != idUsuwanegoAdresata)
+            {
+                numerWczytanejLinii != 1 ? tymczasowyPlikTekstowy << endl << wczytanaLinia : tymczasowyPlikTekstowy << wczytanaLinia;
+                idOstatniegoAdresata = MetodyPomocnicze::konwersjaStringNaInt(wczytanaLinia.substr(0,'|'));
+            }
+            numerWczytanejLinii++;
         }
+        odczytywanyPlikTekstowy.close();
+        tymczasowyPlikTekstowy.close();
+
+        if (remove("listaAdresatow.txt") == 0) {}
+        else
+            cout << "Nie usunieto poprawnie pliku" << endl;
+
+        if (rename("Adresaci_tymczasowo.txt", "listaAdresatow.txt") == 0) {}
+        else
+            cout << "Nazwa pliku nie zostala zmieniona." << endl;
     }
-    else
-        cout << "Nie udalo sie otworzyc pliku " << nazwaPlikuZAdresatami << " i zapisac w nim danych." << endl;
-    plik.close();
 }
+
+void PlikiZAdresatami::edytujAdresataWPliku(Adresat adresat)
+{
+    fstream odczytywnyPlikTekstowy, tymczasowyPlikTekstowy;
+    string wczytanaLinia = "";
+    string zmodyfikowaneDaneAdresata = zamienDaneAdresataNaLinieZDanymiOddzielonaPionowymiKreskami(adresat);
+    int numerWczytanejLinii = 1;
+    int idEdytowanegoAdresata = adresat.pobierzIdAdresata();
+
+    odczytywnyPlikTekstowy.open("listaAdresatow.txt", ios::in);
+    tymczasowyPlikTekstowy.open("Adresaci_tymczasowo.txt", ios::out | ios::app);
+
+    if (odczytywnyPlikTekstowy.good()) {
+        while (getline(odczytywnyPlikTekstowy, wczytanaLinia)) {
+            if (MetodyPomocnicze::konwersjaStringNaInt(wczytanaLinia.substr(0,'|')) != idEdytowanegoAdresata) {
+                numerWczytanejLinii !=1 ? tymczasowyPlikTekstowy << wczytanaLinia : tymczasowyPlikTekstowy << wczytanaLinia << endl;
+            } else {
+                numerWczytanejLinii !=1 ? tymczasowyPlikTekstowy << zmodyfikowaneDaneAdresata : tymczasowyPlikTekstowy << zmodyfikowaneDaneAdresata << endl;
+                }
+            }
+            numerWczytanejLinii++;
+    }
+    odczytywnyPlikTekstowy.close();
+    tymczasowyPlikTekstowy.close();
+
+    if (remove("listaAdresatow.txt") == 0) {}
+        else
+            cout << "Nie usunieto poprawnie pliku" << endl;
+
+        if (rename("Adresaci_tymczasowo.txt", "listaAdresatow.txt") == 0) {}
+        else
+            cout << "Nazwa pliku nie zostala zmieniona." << endl;
+}
+
 
 

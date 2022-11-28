@@ -14,10 +14,10 @@
 
 using namespace std;
 
-class PlikiZAdresatami :public PlikTekstowy
+class PlikiZAdresatami : public PlikTekstowy
 {
-    const string nazwaPlikuZAdresatami;
-   int idOstatniegoAdresata;
+    const string nazwaPliku;
+    int idOstatniegoAdresata;
 
     vector <Adresat> adresaci;
     bool czyPlikJestPusty();
@@ -25,13 +25,14 @@ class PlikiZAdresatami :public PlikTekstowy
     Adresat pobierzDaneAdresata(string daneAdresataOddzielonePionowymiKreskami);
 
 public:
-    PlikiZAdresatami(string  NAZWAPLIKUZADRESATAMI)
-    : nazwaPlikuZAdresatami(NAZWAPLIKUZADRESATAMI) {};
+    PlikiZAdresatami(string  NAZWA_PLIKU)
+    : nazwaPliku(NAZWA_PLIKU) {};
     void dopiszAdresataDoPliku(Adresat adresat);
     vector <Adresat> wczytajAdresatowZPliku(int idZalogowanegoUzytkownika);
     vector <Adresat> wczytajWszystkichAdresatowZPliku();
     int podajIdOstatniegoAdresata();
-    void zapiszWszystkichAdresatowDoPliku(vector <Adresat> adresaci);
+    void usunAdresataZPliku(int idUsuwanegoAdresata);
+    void edytujAdresataWPliku(Adresat adresat);
 };
 
 #endif

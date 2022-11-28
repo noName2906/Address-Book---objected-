@@ -18,7 +18,7 @@ using namespace std;
 
 class AdresatMenedzer
 {
-    int idAdresata, iloscSzukanychAdresatow, szukaneId, liniaDoUsuniecia;
+    int idAdresata, idUsuwanegoAdresata, idOstatniegoAdresata, iloscSzukanychAdresatow, szukaneId, liniaDoUsuniecia;
     const int ID_ZALOGOWANEGO_UZYTKOWNIKA ;
     string noweImie, noweNazwisko, nowyNumerTelefonu, nowyEmail, nowyAdres;
     vector <Adresat> adresaci;

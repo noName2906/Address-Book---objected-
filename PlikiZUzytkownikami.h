@@ -12,9 +12,9 @@
 
 using namespace std;
 
-class PlikiZUzytkownikami :public PlikTekstowy
+class PlikiZUzytkownikami : public PlikTekstowy
 {
-    const string nazwaPlikuZUzytkownikami;
+    const string nazwaPliku;
 
     vector <Uzytkownik> uzytkownicy;
     bool czyPlikJestPusty();
@@ -22,7 +22,7 @@ class PlikiZUzytkownikami :public PlikTekstowy
     Uzytkownik pobierzDaneUzytkownika(string daneUzytkownikaOddzielonePionowymiKreskami);
 
 public:
-    PlikiZUzytkownikami(string  NAZWAPLIKUZUZYTKOWNIKAMI) : nazwaPlikuZUzytkownikami(NAZWAPLIKUZUZYTKOWNIKAMI) {};
+    PlikiZUzytkownikami(string  NAZWA_PLIKU) : nazwaPliku(NAZWA_PLIKU) {};
     void dopiszUzytkownikaDoPliku(Uzytkownik uzytkownik);
     vector <Uzytkownik> wczytajUzytkownikowZPliku();
     void zapiszWszystkichUzytkownikowDoPliku(vector <Uzytkownik> uzytkownicy);

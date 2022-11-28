@@ -172,14 +172,13 @@ void AdresatMenedzer::wyszukajPoNazwisku()
     }
 }
 
-void AdresatMenedzer::usunAdresata()
+void  AdresatMenedzer::usunAdresata()
 {
-    vector <Adresat>::iterator it;
     system ("cls");
     cout << ">>>>> USUN ADRESATA <<<<<" << endl;
     cout << "-------------------------" << endl;
     cout << "Podaj ID adresata ktorego chcesz usunac: ";
-    cin >> szukaneId;
+    cin >> idUsuwanegoAdresata;
     cout << endl;
 
     if (adresaci.empty() == true)
@@ -190,7 +189,7 @@ void AdresatMenedzer::usunAdresata()
 
     for (unsigned int i = 0; i < adresaci.size(); i++)
     {
-        if (adresaci[i].pobierzIdAdresata() == szukaneId)
+        if (adresaci[i].pobierzIdAdresata() == idUsuwanegoAdresata)
         {
             system ("cls");
             cout << ">>>>> USUN ADRESATA <<<<<" << endl;
@@ -208,47 +207,23 @@ void AdresatMenedzer::usunAdresata()
 
             if (wybor == "t")
             {
-                adresaci.clear();
-                adresaci = plikiZAdresatami.wczytajWszystkichAdresatowZPliku();
-
-                for (unsigned int i = 0; i < adresaci.size(); i++)
-                {
-                    if (adresaci[i].pobierzIdAdresata() == szukaneId)
-                    {
-                        liniaDoUsuniecia = i;
-                    }
-                }
-                it = adresaci.begin() + liniaDoUsuniecia;
-                adresaci.erase(it);
-
-                plikiZAdresatami.zapiszWszystkichAdresatowDoPliku(adresaci);
+                plikiZAdresatami.usunAdresataZPliku(idUsuwanegoAdresata);
+                adresaci = plikiZAdresatami.wczytajAdresatowZPliku(ID_ZALOGOWANEGO_UZYTKOWNIKA);
 
                 system ("cls");
                 cout << ">>>>> USUN ADRESATA <<<<<" << endl;
                 cout << "-------------------------" << endl;
-                cout << "Kontakt zostal poprawnie usuniety" << endl;
+                cout << "Kontakt zostal usuniety prawidlowo" << endl;
                 Sleep (2500);
-                break;
             }
-            else
-            {
-                cout << endl;
-                cout << "Kontakt nie zostal usuniety";
-                Sleep (2500);
-                break;
-            }
-        }
-        else if (adresaci[i].pobierzIdAdresata() != szukaneId && adresaci[i].pobierzIdAdresata() == adresaci.back().pobierzIdAdresata())
-        {
-            cout << "Brak adresata z podanym numerem ID! Sprobuj jeszze raz." << endl;
-            Sleep (2500);
-            break;
+
         }
     }
 }
 
 void AdresatMenedzer::edytujAdresata()
 {
+    Adresat adresat;
     system ("cls");
     cout << ">>>>> EDYTUJ ADRESATA <<<<<" << endl;
     cout << "---------------------------" << endl;
@@ -261,27 +236,13 @@ void AdresatMenedzer::edytujAdresata()
         cout << "Brak utworzonej ksiazki adresatow!" << endl;
         Sleep (2500);
     }
-    for (unsigned int i = 0; i < adresaci.size(); i++)
-    {
-        if (adresaci[i].pobierzIdAdresata() == szukaneId)
-        {
-            adresaci.clear();
-            adresaci = plikiZAdresatami.wczytajWszystkichAdresatowZPliku();
-            break;
-        }
-        else if (adresaci[i].pobierzIdAdresata() != szukaneId && adresaci[i].pobierzIdAdresata() == adresaci.back().pobierzIdAdresata())
-        {
-            cout << "Brak adresata z podanym numerem ID! Sprobuj jeszze raz." << endl;
-            Sleep (2500);
-            break;
-        }
-    }
+
     for (unsigned int i = 0; i < adresaci.size(); i++)
     {
         if (adresaci[i].pobierzIdAdresata() == szukaneId && adresaci[i].pobierzIdUzytkownika() == ID_ZALOGOWANEGO_UZYTKOWNIKA)
         {
             system ("cls");
-            cout << ">>>>> USUN ADRESATA <<<<<" << endl;
+            cout << ">>>>> EDYTUJ ADRESATA <<<<<" << endl;
             cout << "-------------------------" << endl;
             cout << "1. Imie:                    " << adresaci[i].pobierzImie() << endl;
             cout << "2. Nazwisko:                " << adresaci[i].pobierzNazwisko() << endl;
@@ -293,36 +254,49 @@ void AdresatMenedzer::edytujAdresata()
             string wybor = MetodyPomocnicze::wczytajLinie();
             cout << endl;
 
+            adresat.ustawIdAdresata(adresaci[i].pobierzIdAdresata());
+            adresat.ustawIdUzytkownika(ID_ZALOGOWANEGO_UZYTKOWNIKA);
+            adresat.ustawImie(adresaci[i].pobierzImie());
+            adresat.ustawNazwisko(adresaci[i].pobierzNazwisko());
+            adresat.ustawNumerTelefonu(adresaci[i].pobierzNumerTelefonu());
+            adresat.ustawEmail(adresaci[i].pobierzEmail());
+            adresat.ustawAdres(adresaci[i].pobierzAdres());
+
             cin.sync();
             if (wybor == "1")
             {
                 cout << "Podaj nowe imie: ";
                 getline(cin, noweImie);
                 adresaci[i].ustawImie(noweImie);
+                adresat.ustawImie(noweImie);
             }
             else if (wybor == "2")
             {
                 cout << "Podaj nowe nazwisko: ";
                 getline(cin, noweNazwisko);
                 adresaci[i].ustawNazwisko(noweNazwisko);
+                adresat.ustawNazwisko(noweNazwisko);
             }
             else if (wybor == "3")
             {
                 cout << "Podaj nowy numer telefonu: ";
                 getline(cin, nowyNumerTelefonu);
                 adresaci[i].ustawNumerTelefonu(nowyNumerTelefonu);
+                adresat.ustawNumerTelefonu(nowyNumerTelefonu);
             }
             else if (wybor == "4")
             {
                 cout << "Podaj nowy adres Email: ";
                 getline(cin, nowyEmail);
                 adresaci[i].ustawEmail(nowyEmail);
+                adresat.ustawEmail(nowyEmail);
             }
             else if (wybor == "5")
             {
                 cout << "Podaj nowy adres: ";
                 getline(cin, nowyAdres);
                 adresaci[i].ustawAdres(nowyAdres);
+                adresat.ustawAdres(nowyAdres);
             }
             else
             {
@@ -333,10 +307,13 @@ void AdresatMenedzer::edytujAdresata()
 
             if(wybor == "1" || wybor == "2" || wybor == "3" || wybor == "4" || wybor == "5")
             {
-                plikiZAdresatami.zapiszWszystkichAdresatowDoPliku(adresaci);
-                cout << endl;
+                plikiZAdresatami.edytujAdresataWPliku(adresat);
+                plikiZAdresatami.wczytajAdresatowZPliku(ID_ZALOGOWANEGO_UZYTKOWNIKA);
+                system ("cls");
+                cout << ">>>>> EDYTUJ ADRESATA <<<<<" << endl;
+                cout << "-------------------------" << endl;
                 cout << "Edycja kontaktu przebiegla pomyslnie" << endl;
-                Sleep (1500);
+                Sleep (2500);
                 break;
             }
         }
